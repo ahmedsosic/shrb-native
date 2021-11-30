@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, View, Text, ScrollView } from 'react-native';
 import Card from './components/Card';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+
+const HomeStack = createNativeStackNavigator();
+
+const HomeStackScreen = ({navigation}) => (
+  <HomeStack.Navigator screenOptions={{
+    headerShown: false
+  }} >
+          <HomeStack.Screen name="Cards" component={HomeScreen} />
+  </HomeStack.Navigator>
+  );
 
 
 const HomeScreen = () => {
@@ -49,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen
+export default HomeStackScreen
