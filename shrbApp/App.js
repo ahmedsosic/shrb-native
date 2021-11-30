@@ -1,23 +1,28 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import HomeScreen from './Screens/HomeScreen';
-import LoginScreen from './Screens/LoginScreen';
-import CardScreen from './Screens/CardScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { DrawerContent } from './Screens/DrawerScreen';
+import HomeStackScreen from './Screens/HomeScreen';
+import CardStackScreen from './Screens/CardScreen';
 
-
+const Drawer = createDrawerNavigator()
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <CardScreen />
-    </View>
+    <NavigationContainer>
+      <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
+        <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
+        <Drawer.Screen name="CardScreen" component={CardStackScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#5e71fc',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,10 +1,21 @@
 import React,{useState} from 'react';
 import {Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import DatePicker from 'react-native-datepicker';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
+const CardStack = createNativeStackNavigator();
 
-const CardScreen = () => {
+const CardStackScreen = ({navigation}) => (
+  <CardStack.Navigator screenOptions={{
+    headerShown: false
+  }}>
+          <CardStack.Screen name="New card" component={CardScreen} />
+  </CardStack.Navigator>
+  );
+
+
+const CardScreen = ({navigation}) => {
 
     const [description, setDescription] = useState('');
     const [date_from, setDateFrom] = useState('');
@@ -104,7 +115,7 @@ const CardScreen = () => {
 
 const styles= StyleSheet.create({
     container: {
-        marginTop: 30,
+        marginTop: 0,
         flex: 1,
         marginBottom: 2,
         backgroundColor: '#5e71fc',
@@ -158,4 +169,4 @@ const styles= StyleSheet.create({
       },
 })
 
-export default CardScreen
+export default CardStackScreen
