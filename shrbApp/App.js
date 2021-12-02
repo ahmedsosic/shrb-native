@@ -12,8 +12,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
-        <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
-        <Drawer.Screen name="CardScreen" component={CardStackScreen} />
+        <Drawer.Screen name="Cards list" component={HomeStackScreen} />
+        <Drawer.Screen name="New card" component={CardStackScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

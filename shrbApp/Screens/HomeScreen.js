@@ -10,7 +10,7 @@ const HomeStackScreen = ({navigation}) => (
   <HomeStack.Navigator screenOptions={{
     headerShown: false
   }} >
-          <HomeStack.Screen name="Cards" component={HomeScreen} />
+          <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
   </HomeStack.Navigator>
   );
 
@@ -48,12 +48,11 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#5e71fc',
     alignItems: 'center',
     justifyContent: 'center',
   },
   cardList: {
-    marginTop: 30,
     flex: 1,
     overflow: 'hidden',
 
