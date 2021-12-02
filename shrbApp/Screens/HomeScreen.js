@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardList: {
-    marginTop: 30,
     flex: 1,
     overflow: 'hidden',
 
