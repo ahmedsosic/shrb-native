@@ -10,7 +10,7 @@ const CardStackScreen = ({navigation}) => (
   <CardStack.Navigator screenOptions={{
     headerShown: false
   }}>
-          <CardStack.Screen name="New card" component={CardScreen} />
+          <CardStack.Screen name="CardScreen" component={CardScreen} />
   </CardStack.Navigator>
   );
 
@@ -117,13 +117,13 @@ const styles= StyleSheet.create({
     container: {
         marginTop: 0,
         flex: 1,
-        marginBottom: 2,
         backgroundColor: '#5e71fc',
         width: '100%',
         alignItems: 'center',
       },
       
     content: {
+        marginTop: 50,
         backgroundColor: 'white',
         width: '80%',
         borderRadius: 30,
