@@ -1,11 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import getToken from '../api-service/api-login';
 
-const LoginScreen = () => {
+
+
+
+
+
+const LoginScreen = ({navigation}) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [keyboardStatus, setKeyboardStatus] = useState(false);
+    const [token, setToken] = useState('')
+    const [is, setIs] = useState(false)
 
     useEffect(() => {
         const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -21,28 +29,34 @@ const LoginScreen = () => {
         };
     }, []);
 
+    const submitForm = () => {
+      getToken(username, password)
+      .then(response => {
+        setToken(response.access)
+      })
+      .then(console.log(token))
+    }
+    
+
+
     return (
     <TouchableWithoutFeedback onPress={ () => {
         Keyboard.dismiss()
     }}>
     <View style={styles.container} >
         {(!keyboardStatus) ? <Image style={styles.image} source ={require("../assets/sablogo.png")}/> : null}
-        <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
           placeholder="Username"
           placeholderTextColor="#003f5c"
           onChangeText={(username) => setUsername(username)}/>
-        </View>
-        <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
           placeholder="Password"
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}/>
-        </View>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={submitForm}>
             <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
         </View>
@@ -70,19 +84,20 @@ const styles = StyleSheet.create({
       },
     
       inputView: {
+      
+      },
+    
+      TextInput: {
         backgroundColor: "#FFF",
         borderRadius: 30,
         width: "60%",
         height: 45,
         marginBottom: 20,
-      },
-    
-      TextInput: {
         height: 50,
-        flex: 1,
+        // flex: 1,
         padding: 10,
-        marginLeft: 20,
-        width: '40%'
+        paddingLeft: 20,
+        
       },
       
       loginBtn: {

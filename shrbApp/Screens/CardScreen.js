@@ -165,7 +165,8 @@ const styles= StyleSheet.create({
         borderColor: 'lightgrey',
         borderRadius: 30,
         width: '30%',
-        height: '10%',        
+        // height: '10%',
+        height: 45        
       },
 })
 
