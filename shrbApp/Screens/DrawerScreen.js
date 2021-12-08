@@ -3,10 +3,15 @@ import {View, StyleSheet} from 'react-native';
 import { Caption, Drawer} from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './components/context';
 
 
 
 export function DrawerContent (props) {
+
+  const {signOut} = React.useContext(AuthContext);
+
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView { ... props}>
@@ -60,7 +65,10 @@ export function DrawerContent (props) {
                     />
                     )}
                     label="Logout"
-                    onPress={() => {props.navigation.navigate('LoginScreen')}}
+                    onPress={() => {
+                      signOut();
+
+                    }}
                 />
             </Drawer.Section>
         </View>
