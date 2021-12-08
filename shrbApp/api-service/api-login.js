@@ -1,8 +1,7 @@
 
 
 export default async function getToken(username, password) {
-  console.log('aaaaaaaaa')
-    return fetch ('http://c1f6-77-77-244-118.ngrok.io/api/token/', {
+    return fetch ('http://e420-2a02-27b0-5502-3b70-b01a-b8c3-f367-c92e.ngrok.io/api/token/', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

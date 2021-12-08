@@ -1,9 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import getToken from '../api-service/api-login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthContext } from './components/context';
 
 
 
+const LoginStack = createNativeStackNavigator();
+
+const LoginStackScreen = ({navigation}) => (
+  <LoginStack.Navigator screenOptions={{
+    headerShown: false
+  }} >
+          <LoginStack.Screen name="LoginScreen" component={LoginScreen} />
+  </LoginStack.Navigator>
+  );
 
 
 
@@ -13,7 +25,8 @@ const LoginScreen = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [keyboardStatus, setKeyboardStatus] = useState(false);
     const [token, setToken] = useState('')
-    const [is, setIs] = useState(false)
+
+    const { signIn } = React.useContext(AuthContext);
 
     useEffect(() => {
         const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -35,6 +48,8 @@ const LoginScreen = ({navigation}) => {
         setToken(response.access)
       })
       .then(console.log(token))
+      AsyncStorage.setItem('token', token)
+      signIn()
     }
     
 
@@ -111,4 +126,4 @@ const styles = StyleSheet.create({
       },
 })
 
-export default LoginScreen
+export default LoginStackScreen

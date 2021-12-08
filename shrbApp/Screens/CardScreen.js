@@ -2,6 +2,9 @@ import React,{useState} from 'react';
 import {Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import newCard from '../api-service/api-newcard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const CardStack = createNativeStackNavigator();
@@ -25,6 +28,16 @@ const CardScreen = ({navigation}) => {
         setDescription('')
         setDateFrom('')
         setDateTo('')
+    }
+    
+    let fields = {
+        date_from: date_from,
+        date_to: date_to,
+        description: description
+    }
+    const submitCard = () => {
+        const token = AsyncStorage.getItem('token')
+        newCard(token, fields)
     }
 
     return(
