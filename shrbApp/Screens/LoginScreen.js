@@ -45,13 +45,11 @@ const LoginScreen = ({navigation}) => {
     const submitForm = () => {
       getToken(username, password)
       .then(response => {
-        setToken(response.access)
+      signIn(response.access)
+        console.log({response})
       })
-      .then(console.log(token))
-      AsyncStorage.setItem('token', token)
-      signIn()
+      
     }
-    
 
 
     return (
@@ -64,6 +62,7 @@ const LoginScreen = ({navigation}) => {
           style={styles.TextInput}
           placeholder="Username"
           placeholderTextColor="#003f5c"
+          autoCapitalize = 'none'
           onChangeText={(username) => setUsername(username)}/>
         <TextInput
           style={styles.TextInput}

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
+
 const CardStack = createNativeStackNavigator();
 
 const CardStackScreen = ({navigation}) => (
@@ -35,8 +36,9 @@ const CardScreen = ({navigation}) => {
         date_to: date_to,
         description: description
     }
-    const submitCard = () => {
-        const token = AsyncStorage.getItem('token')
+    const submitCard = async () => {
+        
+        const token = await AsyncStorage.getItem('token')
         newCard(token, fields)
     }
 
@@ -116,6 +118,7 @@ const CardScreen = ({navigation}) => {
         <TouchableOpacity style={styles.button} onPress={() => {
             console.log(description, date_from, date_to)
             resetVal()
+            submitCard()
             }}>
             <Text style={{color: 'white', fontSize: 18}}>SAVE</Text>
         </TouchableOpacity>

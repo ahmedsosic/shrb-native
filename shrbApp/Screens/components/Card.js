@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Touchable } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const Card = ({card}) => {
     const {date_from, date_to, description} = card

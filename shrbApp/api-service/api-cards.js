@@ -1,13 +1,10 @@
-export default async function newCard(token, fields) {
+export default async function getCards(token) {
     return fetch ('https://shrb2.herokuapp.com/api/cards/', {
-        method: 'POST',
+        method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-          
-        },
-        body: JSON.stringify(fields)
+          Authorization: `Bearer ${token}`}
       })
       .then((response) => response.json()) 
  

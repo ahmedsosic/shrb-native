@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, View, Text, ScrollView } from 'react-native';
 import Card from './components/Card';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import getCards from '../api-service/api-cards';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
@@ -19,26 +21,29 @@ const HomeStackScreen = ({navigation}) => (
 
 const HomeScreen = () => {
 
-    const [cards, setCards] = useState([
-    {date_from: '12-12-2021', date_to: '13-12-2021', description: 'odmor', key: 1},
-    {date_from: '22-10-2021', date_to: '23-10-2021', description: 'bolovanje', key: 2},
-    {date_from: '12-12-2021', date_to: '13-12-2021', description: 'odmor', key: 3},
-    {date_from: '22-10-2021', date_to: '23-10-2021', description: 'bolovanje', key: 4},
-    {date_from: '12-12-2021', date_to: '13-12-2021', description: 'odmor', key: 5},
-    {date_from: '22-10-2021', date_to: '23-10-2021', description: 'bolovanje', key: 6},
-    {date_from: '12-12-2021', date_to: '13-12-2021', description: 'odjhkjh hkjhkjh jhkjhkj jkhmor', key: 7},
-    {date_from: '22-10-2021', date_to: '23-10-2021', description: 'bolovanje', key: 8},
-    {date_from: '12-12-2021', date_to: '13-12-2021', description: 'odmor', key: 9},
-    {date_from: '22-10-2021', date_to: '23-10-2021', description: 'bolovanje', key: 10},
-  ])
+  const [cards, setCards] = useState([])
+  const [change, setChange] = useState(false)
 
-  const token = AsyncStorage.getItem('token')
-  console.log("tokeeeeeen", token)
-
+  useEffect(() => {
+    async function neka_funkcija(){
+      const token =  await AsyncStorage.getItem('token')
+    getCards(token)
+    .then(response => {
+      setCards(response)
+      // setCards(cards.reverse())
+      setChange(true)
+      console.log({response})
+    })
+    .catch(err => console.log(err))
+    } 
+    neka_funkcija()
+  }, [change])
+ console.log({cards})
   return (
     <View style={styles.container}>
         <View style={styles.cardList}>
             <FlatList
+                keyExtractor={(item, index) =>index}
                 showsVerticalScrollIndicator={false}
                 data={cards}
                 renderItem={({item}) => (
