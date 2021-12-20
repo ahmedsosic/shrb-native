@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import getToken from '../api-service/api-login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthContext } from './components/context';
+import checkCredentials from '../api-service/credentials';
+import { Feather } from '@expo/vector-icons';
 
 
 
@@ -24,9 +25,10 @@ const LoginScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [keyboardStatus, setKeyboardStatus] = useState(false);
-    const [token, setToken] = useState('')
+    const [show, setShow] = useState(false)
+    
 
-    const { signIn } = React.useContext(AuthContext);
+    const { signIn, throwAlert } = useContext(AuthContext);
 
     useEffect(() => {
         const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -42,15 +44,35 @@ const LoginScreen = ({navigation}) => {
         };
     }, []);
 
-    const submitForm = () => {
-      getToken(username, password)
-      .then(response => {
-      signIn(response.access)
-        console.log({response})
-      })
-      
-    }
+    
 
+    const submitForm = () => {
+      if(username === '' || password === ''){
+        Alert.alert(
+          "Credentials required!",
+          "Enter username and password.."
+        ),
+        [{text: "Okay"}]
+      }
+      else{
+        getToken(username, password)
+        .then(response => {
+          let truth = checkCredentials(response.access)
+          if(truth === true){
+            signIn(response.access)
+          }
+          else{
+            Alert.alert(
+              "Wrong credentials!",
+              "Check username or password.."
+            ),
+            [{
+              text: "Okay"
+            }]
+          }
+        })
+      }
+  }
 
     return (
     <TouchableWithoutFeedback onPress={ () => {
@@ -58,20 +80,30 @@ const LoginScreen = ({navigation}) => {
     }}>
     <View style={styles.container} >
         {(!keyboardStatus) ? <Image style={styles.image} source ={require("../assets/sablogo.png")}/> : null}
+        
         <TextInput
           style={styles.TextInput}
           placeholder="Username"
+          value={username}
           placeholderTextColor="#003f5c"
           autoCapitalize = 'none'
-          onChangeText={(username) => setUsername(username)}/>
+          onChangeText={(username) => setUsername(username)}
+          />
+            
         <TextInput
           style={styles.TextInput}
           placeholder="Password"
+          value={password}
           placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}/>
+          secureTextEntry={!show}
+          onChangeText={(password) => setPassword(password)}  
+        />
+        <TouchableOpacity onPress={() => setShow(!show)}>
+        <Feather name={!show ? 'eye' : 'eye-off'} color='#fff' size={20} />
+        </TouchableOpacity>
+        
         <TouchableOpacity style={styles.loginBtn} onPress={submitForm}>
-            <Text style={styles.loginText}>LOGIN</Text>
+            <Text sty5le={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
         </View>
         </TouchableWithoutFeedback>
@@ -90,7 +122,6 @@ const styles = StyleSheet.create({
       },
       
       image: {
-        
         marginBottom: 70,
         width: 150,
         height: 150,

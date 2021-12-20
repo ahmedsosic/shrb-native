@@ -1,4 +1,3 @@
-
 export default async function getToken(username, password) {
     return fetch ('https://shrb2.herokuapp.com/api/token/', {
         method: 'POST',

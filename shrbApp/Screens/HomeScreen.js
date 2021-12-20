@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, View, Text, ScrollView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { RefreshControl, FlatList, StyleSheet, View, ScrollView } from 'react-native';
 import Card from './components/Card';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import getCards from '../api-service/api-cards';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -19,29 +19,70 @@ const HomeStackScreen = ({navigation}) => (
   );
 
 
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  
+
+
 const HomeScreen = () => {
 
   const [cards, setCards] = useState([])
   const [change, setChange] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    async function neka_funkcija(){
+  const onRefresh = useCallback(() => {
+      setRefreshing(true);
+      wait(1500).then(() => setRefreshing(false));
+      setChange(false)
+    }, []); 
+
+
+  useFocusEffect(useCallback(() => {
+    async function fetchCards(){
       const token =  await AsyncStorage.getItem('token')
-    getCards(token)
+    await getCards(token)
     .then(response => {
-      setCards(response)
-      // setCards(cards.reverse())
+      setCards(response.reverse())
       setChange(true)
-      console.log({response})
     })
     .catch(err => console.log(err))
     } 
-    neka_funkcija()
-  }, [change])
- console.log({cards})
+    fetchCards()
+  }, [change]))
+
+
+  // useEffect(() => {
+  //   async function fetchCards(){
+  //     const token =  await AsyncStorage.getItem('token')
+  //   await getCards(token)
+  //   .then(response => {
+  //     setCards(response.reverse())
+  //     // setCards(cards.reverse())
+  //     setChange(true)
+  //   })
+  //   .catch(err => console.log(err))
+  //   } 
+  //   fetchCards()
+  // }, [change])
+
+
+
   return (
     <View style={styles.container}>
+      <ScrollView
+        style={{flex: 1, width: '80%'}}
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        >
         <View style={styles.cardList}>
+        
             <FlatList
                 keyExtractor={(item, index) =>index}
                 showsVerticalScrollIndicator={false}
@@ -50,7 +91,10 @@ const HomeScreen = () => {
                     <Card card={item} />
                 )} 
             />
+
+          
         </View>
+        </ScrollView>
     </View>
   );
 }

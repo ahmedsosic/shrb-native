@@ -4,6 +4,7 @@ import DatePicker from 'react-native-datepicker';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import newCard from '../api-service/api-newcard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
 
 
 
@@ -30,16 +31,13 @@ const CardScreen = ({navigation}) => {
         setDateFrom('')
         setDateTo('')
     }
+  
     
-    let fields = {
-        date_from: date_from,
-        date_to: date_to,
-        description: description
-    }
     const submitCard = async () => {
-        
         const token = await AsyncStorage.getItem('token')
-        newCard(token, fields)
+        try{
+            newCard(token, date_from, date_to, description)
+        }catch(err){console.log(err)}
     }
 
     return(
@@ -57,9 +55,8 @@ const CardScreen = ({navigation}) => {
                     date={date_from} // Initial date from state
                     mode="date" // The enum of date, datetime and time
                     placeholder="Select date"
-                    format="DD-MM-YYYY"
-                    minDate="01-01-2021"
-                    maxDate="01-01-2025"
+                    format="YYYY-MM-DD"
+                    minDate="2021-01-01"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
                     customStyles={{
@@ -87,9 +84,8 @@ const CardScreen = ({navigation}) => {
             date={date_to} // Initial date from state
             mode="date" // The enum of date, datetime and time
             placeholder="Select date"
-            format="DD-MM-YYYY"
-            minDate="01-01-2021"
-            maxDate="01-01-2025"
+            format="YYYY-MM-DD"
+            minDate="2021-01-01"
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
@@ -116,9 +112,9 @@ const CardScreen = ({navigation}) => {
             
         />
         <TouchableOpacity style={styles.button} onPress={() => {
-            console.log(description, date_from, date_to)
             resetVal()
             submitCard()
+            navigation.navigate('Cards list')
             }}>
             <Text style={{color: 'white', fontSize: 18}}>SAVE</Text>
         </TouchableOpacity>

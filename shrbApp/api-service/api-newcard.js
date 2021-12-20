@@ -1,14 +1,16 @@
-export default async function newCard(token, fields) {
-    return fetch ('https://shrb2.herokuapp.com/api/cards/', {
+export default async function newCard(token, date_from, date_to, description) {
+    return fetch ('http://shrb2.herokuapp.com/api/cards/', {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-          
-        },
-        body: JSON.stringify(fields)
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,   
+        }, 
+        body: JSON.stringify({
+          date_from: date_from,
+          date_to: date_to,
+          description: description
       })
-      .then((response) => response.json()) 
- 
+      })
+      .catch(err => console.log(err))
 };

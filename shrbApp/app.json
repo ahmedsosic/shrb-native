@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "shrbApp",
+    "name": "Saburly",
     "slug": "shrbApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sablogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5e71fc"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,13 +20,11 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "tothepointcode.shrbApp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/sablogo.png",
+        "backgroundColor": "#5e71fc"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }
