@@ -23,11 +23,16 @@ const HomeStackScreen = ({navigation}) => (
     return new Promise(resolve => setTimeout(resolve, timeout));
   }
   
-
-
 const HomeScreen = () => {
 
-  const [cards, setCards] = useState([])
+  const [cards, setCards] = useState([
+    {
+      id: 0,
+      date_from: '01-01-2021',
+      date_to: '01-01-2021',
+      description: 'Dobrodosli'
+    }
+  ])
   const [change, setChange] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
 
@@ -35,10 +40,10 @@ const HomeScreen = () => {
       setRefreshing(true);
       wait(1500).then(() => setRefreshing(false));
       setChange(false)
-    }, []); 
-
+    }, []);
 
   useFocusEffect(useCallback(() => {
+    setChange(false)
     async function fetchCards(){
       const token =  await AsyncStorage.getItem('token')
     await getCards(token)
@@ -84,11 +89,12 @@ const HomeScreen = () => {
         <View style={styles.cardList}>
         
             <FlatList
-                keyExtractor={(item, index) =>index}
+
+                keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
                 data={cards}
                 renderItem={({item}) => (
-                    <Card card={item} />
+                    <Card card={item} key={item.id} data={setChange}/>
                 )} 
             />
 
