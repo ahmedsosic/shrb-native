@@ -3,10 +3,13 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import deleteCard from "../../api-service/api-deleteard";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Pop from './Pop-up'
 
-const Card = ({card}) => {
-    const {date_from, date_to, description, id, setChange} = card
+const Card = ({card, onRefresh}) => {
+    const {date_from, date_to, description, id} = card
     const [options, showOptions] = useState(false)
+    const [showPop, setShowPop] = useState(false)
+
 
     const cardAlert = (id) => {
         Alert.alert(
@@ -26,12 +29,12 @@ const Card = ({card}) => {
     const delCard = async (id) => { // delete Card
         const token = await AsyncStorage.getItem('token')
         deleteCard(token, id)
-        return () => setChange(false)
+        onRefresh()
     }
 
     return(
         <View style={styles.container}>
-            <TouchableOpacity onLongPress={() => showOptions(!options)}>
+            <TouchableOpacity onPress={() => showOptions(!options)}>
             <Text style={styles.field}>Date from: <Text style={styles.props}>{date_from}</Text></Text>
             <Text style={styles.field}>Date to: <Text style={styles.props}>{date_to}</Text></Text>
             <Text style={styles.field}>Description: <Text style={styles.props}>{description}</Text></Text>
@@ -40,10 +43,11 @@ const Card = ({card}) => {
                 <TouchableOpacity onPress={() => cardAlert(id)}>
                     <AntDesign name="delete" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowPop(!showPop)}>
                     <AntDesign name="edit" size={24} color="black" />
                 </TouchableOpacity>
             </View>) : null}
+            <Pop showPop={showPop} setShowPop={setShowPop} onRefresh={onRefresh} card={card}/>
         </View>
     )
 }

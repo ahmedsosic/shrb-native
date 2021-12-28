@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { RefreshControl, FlatList, StyleSheet, View, ScrollView } from 'react-native';
 import Card from './components/Card';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -25,52 +25,30 @@ const HomeStackScreen = ({navigation}) => (
   
 const HomeScreen = () => {
 
-  const [cards, setCards] = useState([
-    {
-      id: 0,
-      date_from: '01-01-2021',
-      date_to: '01-01-2021',
-      description: 'Dobrodosli'
-    }
-  ])
-  const [change, setChange] = useState(false)
+  const [cards, setCards] = useState([])
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
       setRefreshing(true);
       wait(1500).then(() => setRefreshing(false));
-      setChange(false)
+      fetchCards()
+      console.log('refresh')
     }, []);
 
-  useFocusEffect(useCallback(() => {
-    setChange(false)
     async function fetchCards(){
-      const token =  await AsyncStorage.getItem('token')
-    await getCards(token)
-    .then(response => {
-      setCards(response.reverse())
-      setChange(true)
-    })
-    .catch(err => console.log(err))
-    } 
-    fetchCards()
-  }, [change]))
+        const token =  await AsyncStorage.getItem('token')
+      await getCards(token)
+      .then(response => {
+        setCards(response.reverse())
+      })
+      .catch(err => console.log(err))
+      } 
 
-
-  // useEffect(() => {
-  //   async function fetchCards(){
-  //     const token =  await AsyncStorage.getItem('token')
-  //   await getCards(token)
-  //   .then(response => {
-  //     setCards(response.reverse())
-  //     // setCards(cards.reverse())
-  //     setChange(true)
-  //   })
-  //   .catch(err => console.log(err))
-  //   } 
-  //   fetchCards()
-  // }, [change])
-
+  useFocusEffect(useCallback(() => {
+    setTimeout(() => {fetchCards()}, 1000)
+    console.log('opet')
+    
+  }, []))
 
 
   return (
@@ -87,18 +65,14 @@ const HomeScreen = () => {
         }
         >
         <View style={styles.cardList}>
-        
             <FlatList
-
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
                 data={cards}
                 renderItem={({item}) => (
-                    <Card card={item} key={item.id} data={setChange}/>
-                )} 
+                    <Card card={item} key={item.id} onRefresh={onRefresh}/>
+                )}
             />
-
-          
         </View>
         </ScrollView>
     </View>
